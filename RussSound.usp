@@ -1,0 +1,54 @@
+#DEFAULT_VOLATILE
+#ENABLE_STACK_CHECKING
+#ENABLE_TRACE
+
+
+
+string ClientIPAddress[64];
+integer ClientPortNumber;
+
+
+DIGITAL_INPUT Z1_VolUp, Z1_VolDown, Z1_PowerOff;
+DIGITAL_INPUT Z1_Source1, Z1_Source2, Z1_Source3, Z1_Source4, Z1_Source5, Z1_Source6, Z1_Source7 ,Z1_Source8;
+
+
+TCP_CLIENT RussSoundSocket[1024];
+
+PUSH Z1_VolUp
+{
+
+    SIGNED_INTEGER status;
+
+	trace("Vol up");
+    status = SocketConnectClient (RussSoundSocket, ClientIPAddress, ClientPortNumber, 0);
+    if (status < 0)
+        trace("Error connecting socket to address %s on port  %d", ClientIPAddress, ClientPortNumber);
+
+    trace("Soc status %d\n", RussSoundSocket.SocketStatus);
+
+    status = SocketSend(RussSoundSocket, "EVENT C[1].Z[1]!KeyPress VolumeUp\r");
+    if (status < 0)
+    	trace("Error sending: %d", status);
+
+	status = SocketDisconnectClient (RussSoundSocket);
+	if (status < 0)
+    	trace("Error disconnecting socket to address %s on port  %d", ClientIPAddress, ClientPortNumber);
+
+
+}
+
+PUSH Z1_VolDown
+{
+    // TODO:  Add code here
+}
+
+Function Main()
+{
+	trace("RussSound Started");
+	ClientIPAddress = "10.0.0.145";
+	ClientPortNumber= 9621;
+}
+
+
+
+
