@@ -4,11 +4,14 @@
 #ENABLE_TRACE
 #USER_SIMPLSHARP_LIBRARY "TestLib"
 
-Digital_input b1;
+digital_input b1;
+digital_output dout;
+string_output sout;
 
 Test MyTest;
 
 Threadsafe push b1
 {
-	MyTest.ReturnInt();
+	dout=MyTest.ReturnInt();
+	sout=MyTest.ReturnString();
 }
